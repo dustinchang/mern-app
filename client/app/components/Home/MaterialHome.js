@@ -64,6 +64,7 @@ export default class MaterialHome extends Component {
   };
 
   //TODO set the grid areas for the stock tickers list
+  //TODO Handle server refresh and it orders the stock tickers
   render() {
     return (
       <MuiThemeProvider>
