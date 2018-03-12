@@ -1,3 +1,43 @@
 @charset "UTF-8";
 
 @import 'vendor/normalize';
+
+//Colors
+$materialGreen: #00897b;
+
+.app-bar {
+  background-color: $materialGreen !important;
+}
+
+.container {
+  margin-top: 20px;
+  color: $materialGreen;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr, auto, 1fr;
+  grid-template-areas:  "ticker price"
+                        "tickers prices"
+                        "add-tickers prices";
+  justify-items: center;
+
+  .ticker {
+    grid-area: ticker;
+  }
+
+  .price {
+    grid-area: price;
+  }
+
+  .tickers {
+    grid-area: tickers;
+  }
+
+  .prices {
+    grid-area: prices;
+  }
+
+  .add-tickers {
+    grid-area: add-tickers;
+  }
+}
+

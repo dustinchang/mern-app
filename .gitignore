@@ -1,7 +1,7 @@
 # Compiled files
 dist/
 
-# Config file
+# Config file, so that you don't place your database credentials online
 config/config.js
 
 # Node stuff
