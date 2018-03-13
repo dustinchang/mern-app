@@ -30,6 +30,10 @@ $materialGreen: #00897b;
 
   .tickers {
     grid-area: tickers;
+
+    .ticker-item {
+      height: 31px !important;
+    }
   }
 
   .prices {

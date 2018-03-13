@@ -6,6 +6,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 import TextField from 'material-ui/TextField';
 import {red500} from 'material-ui/styles/colors'
+import FlatButton from 'material-ui/FlatButton';
 
 export default class MaterialHome extends Component {
   constructor(props) {
@@ -63,7 +64,25 @@ export default class MaterialHome extends Component {
 
   };
 
-  //TODO set the grid areas for the stock tickers list
+  onClickRefresh = (event) => {
+    const symbols = this.state.stocks.map(stock => stock.stockName).toString();
+    const alpha_key = 'NNOSUQMKR1PZQCEK';
+    const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${symbols}&apikey=${alpha_key}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        let stocks = this.state.stocks;
+        json['Stock Quotes'].forEach(stock => {
+          const currStock = stocks.find(stk => stk.stockName.toUpperCase() === stock['1. symbol']);
+          if(currStock) {
+            currStock.stockQuote = stock['2. price'];
+          }
+        });
+        this.setState({stocks});
+      });
+  };
+  
   //TODO Handle server refresh and it orders the stock tickers
   render() {
     return (
@@ -72,12 +91,16 @@ export default class MaterialHome extends Component {
           <AppBar title='Material Mern App' className='app-bar' showMenuIconButton={false}/>
           <div className='container'>
             <strong className='ticker'><u>Stock Tickers</u></strong>
-            <strong className='price'><u>Stock Price</u></strong>
+            <div className='price'>
+            <strong><u>Stock Price</u></strong>
+              <FlatButton onClick={this.onClickRefresh} label="Refresh" primary={true}/>
+            </div>
 
-            <ul>
+            <ul className='tickers'>
               { this.state.stocks.map((stock, i) => (
                 <li key={i}>
                   <TextField
+                    className='ticker-item'
                     hintText="Input a stock ticker"
                     value={stock.stockName}
                     onChange={this.handleChange.bind(this, i)}
@@ -85,6 +108,17 @@ export default class MaterialHome extends Component {
                   <FloatingActionButton onClick={() => this.deleteStock(i)} mini={true} backgroundColor={red500}>
                     <ContentClear/>
                   </FloatingActionButton>
+                </li>
+              ))}
+            </ul>
+
+            <ul className='prices'>
+              { this.state.stocks.map((stock, i) => (
+                <li key={i}>
+                  <TextField
+                    disabled={true}
+                    value={stock.stockQuote}
+                  />
                 </li>
               ))}
             </ul>
