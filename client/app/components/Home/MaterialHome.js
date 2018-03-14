@@ -11,12 +11,10 @@ import FlatButton from 'material-ui/FlatButton';
 export default class MaterialHome extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      stocks: []
-    };
+    this.state = {stocks: []};
   }
 
+  //Fetch the stocks from db
   componentDidMount() {
     fetch('/api/stocks')
       .then(res => res.json())
@@ -24,9 +22,11 @@ export default class MaterialHome extends Component {
         this.setState({
           stocks: json
         });
+        this.quoteRefresh();
       });
   }
 
+  //Creates a blank new stock placement
   newStock = () => {
     fetch('/api/stocks', {method: 'POST'})
       .then(res => res.json())
@@ -37,6 +37,7 @@ export default class MaterialHome extends Component {
       });
   };
 
+  //Deletes a stock from db
   deleteStock = index => {
     const id = this.state.stocks[index]._id;
     fetch(`/api/stocks/${id}`, {method: 'DELETE'})
@@ -45,12 +46,14 @@ export default class MaterialHome extends Component {
       });
   };
 
+  //Modify an existing stock
   _modifyStock(index, data) {
     let stocks = this.state.stocks;
     data ? stocks[index] = data : stocks.splice(index, 1);
     this.setState({stocks});
   }
 
+  //Handle changes in text and updates db
   handleChange = (index, event, newVal) => {
     const id = this.state.stocks[index]._id;
 
@@ -61,10 +64,15 @@ export default class MaterialHome extends Component {
     })
       .then(res => res.json())
       .then(json => this._modifyStock(index, json));
-
   };
 
+  //On refresh button click refresh the stock quotes
   onClickRefresh = (event) => {
+    this.setStockQuotes(event);
+  };
+
+  //Sets the stock quotes
+  setStockQuotes = (event) => {
     const symbols = this.state.stocks.map(stock => stock.stockName).toString();
     const alpha_key = 'NNOSUQMKR1PZQCEK';
     const url = `https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=${symbols}&apikey=${alpha_key}`;
@@ -82,13 +90,18 @@ export default class MaterialHome extends Component {
         this.setState({stocks});
       });
   };
-  
-  //TODO Handle server refresh and it orders the stock tickers
+
+  //Polling function to update stock quotes every 10 seconds
+  quoteRefresh = () => {
+    this.setStockQuotes();
+    setTimeout(this.quoteRefresh, 10000);
+  };
+
   render() {
     return (
       <MuiThemeProvider>
         <div>
-          <AppBar title='Material Mern App' className='app-bar' showMenuIconButton={false}/>
+          <AppBar title='Material Mern Stock App' className='app-bar' showMenuIconButton={false}/>
           <div className='container'>
             <strong className='ticker'><u>Stock Tickers</u></strong>
             <div className='price'>
@@ -116,6 +129,7 @@ export default class MaterialHome extends Component {
               { this.state.stocks.map((stock, i) => (
                 <li key={i}>
                   <TextField
+                    id={`${i}`}
                     disabled={true}
                     value={stock.stockQuote}
                   />
