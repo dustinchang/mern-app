@@ -104,11 +104,6 @@ export default class MaterialHome extends Component {
           <AppBar title='Material Mern Stock App' className='app-bar' showMenuIconButton={false}/>
           <div className='container'>
             <strong className='ticker'><u>Stock Tickers</u></strong>
-            <div className='price'>
-            <strong><u>Stock Price</u></strong>
-              <FlatButton onClick={this.onClickRefresh} label="Refresh" primary={true}/>
-            </div>
-
             <ul className='tickers'>
               { this.state.stocks.map((stock, i) => (
                 <li key={i}>
@@ -125,6 +120,10 @@ export default class MaterialHome extends Component {
               ))}
             </ul>
 
+            <div className='price'>
+            <strong><u>Stock Price</u></strong>
+              <FlatButton onClick={this.onClickRefresh} label="Refresh" primary={true}/>
+            </div>
             <ul className='prices'>
               { this.state.stocks.map((stock, i) => (
                 <li key={i}>

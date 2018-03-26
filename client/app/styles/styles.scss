@@ -4,44 +4,83 @@
 
 //Colors
 $materialGreen: #00897b;
+//Sizes
+$marginTop: 20px;
 
 .app-bar {
   background-color: $materialGreen !important;
 }
 
 .container {
-  margin-top: 20px;
+  max-width: 336px;
+  margin-top: $marginTop;
   color: $materialGreen;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr, auto, 1fr;
-  grid-template-areas:  "ticker price"
-                        "tickers prices"
-                        "add-tickers prices";
-  justify-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr, auto, 1fr, auto, 1fr;
+  grid-template-areas:  "ticker"
+                        "tickers"
+                        "price"
+                        "prices"
+                        "add-tickers";
 
   .ticker {
-    grid-area: ticker;
-  }
-
-  .price {
-    grid-area: price;
+    justify-self: center;
   }
 
   .tickers {
-    grid-area: tickers;
-
     .ticker-item {
       height: 31px !important;
     }
   }
 
-  .prices {
-    grid-area: prices;
+  .price {
+    justify-self: center;
   }
 
   .add-tickers {
-    grid-area: add-tickers;
+    justify-self: center;
   }
 }
+
+@media only screen and (min-width: 675px){
+  .container {
+    max-width: none;
+    margin-top: $marginTop;
+    color: $materialGreen;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr, auto, 1fr;
+    grid-template-areas:  "ticker price"
+                          "tickers prices"
+                          "add-tickers prices";
+    justify-items: center;
+
+    .ticker {
+      grid-area: ticker;
+      align-self: center;
+    }
+
+    .price {
+      grid-area: price;
+    }
+
+    .tickers {
+      grid-area: tickers;
+
+      .ticker-item {
+        height: 31px !important;
+      }
+    }
+
+    .prices {
+      grid-area: prices;
+    }
+
+    .add-tickers {
+      grid-area: add-tickers;
+    }
+  }
+}
+
 
